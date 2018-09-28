@@ -9,6 +9,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <vector>
 #include <cv.hpp>
+#include "opencv-eid-recognizer/recognizer.h"
 
 using namespace std;
 using namespace cv;
@@ -61,15 +62,11 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
 
     vector<KeyPoint> v;
 
-//    FastFeatureDetector* detector = FastFeatureDetector::create(50);
-//    detector->detect(mgray, v);
+    FastFeatureDetector* detector = FastFeatureDetector::create(50);
+    detector->detect(mgray, v);
 
-    Ptr<FastFeatureDetector> detector=FastFeatureDetector::create();
-    vector<Mat> descriptor;
-
-    detector->detect(mgray,v);
-//    drawKeypoints(mbgra, v, mbgra);
-
+    float focusscore = focus_score(&mgray, false);
+    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Focus Score: %f", focusscore );
 
     for( size_t i = 0; i < v.size(); i++ )
         circle(mbgra, Point(v[i].pt.x, v[i].pt.y), 10, Scalar(0,0,255,255));
@@ -78,4 +75,9 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
     env->ReleaseByteArrayElements(yuv, _yuv, 0);
 }
 
+
+
+}
+void log(String text) {
+    // TODO Implement
 }

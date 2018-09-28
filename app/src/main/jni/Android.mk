@@ -7,7 +7,7 @@ OPENCV_CAMERA_MODULES:=off
 include /Users/Wingding/Downloads/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk
 
 LOCAL_MODULE    := native-lib
-LOCAL_SRC_FILES := native-lib.cpp
+LOCAL_SRC_FILES := native-lib.cpp opencv-eid-recognizer/recognizer.cpp
 LOCAL_LDLIBS +=  -llog -ldl
 
 include $(BUILD_SHARED_LIBRARY)
