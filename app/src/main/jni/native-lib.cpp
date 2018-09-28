@@ -53,6 +53,8 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
     Mat mbgra(height, width, CV_8UC4, (unsigned char *)_bgra);
     Mat mgray(height, width, CV_8UC1, (unsigned char *)_yuv);
 
+    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Dimens: %i , %i ", myuv.rows , myuv.cols);
+
     //Please make attention about BGRA byte order
     //ARGB stored in java as int array becomes BGRA at native level
     cvtColor(myuv, mbgra, CV_YUV420sp2BGR, 4);

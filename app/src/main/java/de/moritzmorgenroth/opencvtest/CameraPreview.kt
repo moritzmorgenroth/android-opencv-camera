@@ -2,7 +2,7 @@ package de.moritzmorgenroth.opencvtest
 
 import android.content.Context
 import android.graphics.*
-import android.hardware.camera2.CameraDevice
+import android.hardware.Camera
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -16,10 +16,12 @@ class CameraPreview(
         private val mCamera: Camera
 ) : SurfaceView(context), SurfaceHolder.Callback, Camera.PreviewCallback {
 
-    var processingInProgress = false;
-    init {
 
-    }
+    // FIXME stop analysing when invisible.
+
+
+    private val TAG = CameraPreview.javaClass.simpleName;
+
     private val mHolder: SurfaceHolder = holder.apply {
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -89,22 +91,22 @@ class CameraPreview(
         if (mCamera != null) {
             val params = mCamera.parameters
             val sizes = params.supportedPreviewSizes
+
+            // Since the image is served upside down, this is a little counterintuitive
+
             mFrameWidth = width
             mFrameHeight = height
 
-            // selecting optimal camera preview size
-            run {
-                var minDiff = Int.MAX_VALUE
-                for (size in sizes) {
-                    if (Math.abs(size.height - height) < minDiff) {
-                        mFrameWidth = size.width
-                        mFrameHeight = size.height
-                        minDiff = Math.abs(size.height - height)
-                    }
-                }
-            }
+            Log.d(TAG, "ViewHolder Size: " + width  + "," +  height )
+
+            val size = CameraUtil.getOptimalPreviewSize(sizes, mFrameHeight, mFrameWidth)
+            mFrameWidth = size!!.width
+            mFrameHeight = size!!.height
+
+            Log.d(TAG, "Selected Size: " + mFrameWidth  + "," +  mFrameHeight )
 
             params.setPreviewSize(mFrameWidth, mFrameHeight)
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             mCamera.parameters = params
             try {
                 mCamera.setPreviewDisplay(null)
@@ -116,8 +118,11 @@ class CameraPreview(
         }
     }
 
-    private var numFramesSkipped = 0;
-    private var detectedBitmap: Bitmap? = null;
+    var processingInProgress = false;
+
+    val analytics = Analytics()
+    private var detectedBitmap: Bitmap = Bitmap.createBitmap(1,
+            1, Bitmap.Config.ARGB_8888)
 
     var mFrameWidth: Int = 0
     var mFrameHeight: Int = 0
@@ -130,7 +135,7 @@ class CameraPreview(
 
         if (processingInProgress) {
             // return frame buffer to pool
-            numFramesSkipped++
+            analytics.numFramesSkipped++
             camera?.addCallbackBuffer(data)
             return
         }
@@ -138,10 +143,9 @@ class CameraPreview(
 
 
         /** pika  */
-        if(detectedBitmap == null) detectedBitmap = Bitmap.createBitmap(500,
-                300, Bitmap.Config.ARGB_8888)
-        nScanFrame(data,  detectedBitmap!!)
+        nScanFrame(data,  detectedBitmap)
 
+        Log.d(TAG, "Dimens: " + detectedBitmap.width + " , " + detectedBitmap.height )
 //        tryDrawing(mHolder, null)
 //        processFrame(data)
 
@@ -154,7 +158,18 @@ class CameraPreview(
 
     }
 
-    private val TAG = "CAMERA"
+    protected fun processFrame(data: ByteArray): Bitmap {
+        Log.d(TAG, data.size.toString());
+        val frameSize = mFrameWidth * mFrameHeight
+        val rgba = IntArray(frameSize)
+
+        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
+
+
+        val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
+        bmp.setPixels(rgba, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
+        return bmp
+    }
 
     private fun tryDrawing(holder: SurfaceHolder, bitmap: Bitmap?) {
         Log.i(TAG, "Trying to draw...")
@@ -171,36 +186,26 @@ class CameraPreview(
     private fun drawMyStuff(canvas: Canvas, bitmap: Bitmap?) {
         Log.i(TAG, "Drawing...")
         canvas.drawRGB(255, 128, 128)
-//        if(bitmap != null)canvas.drawBitmap(bitmap!!, Rect(0, 0, 200, 200) , Rect(0, 0, 50, 100),null) :
+
+        Log.d(TAG, "Dimens of Frame: " + bitmap!!.width + "," + bitmap!!.height)
+
         if(bitmap != null) {
 
             val matrix = Matrix();
-
             matrix.postRotate(90F);
-
-            val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, mFrameWidth, mFrameHeight, matrix, true)
-
-            canvas.drawBitmap(rotatedBitmap!!, 0F, 0F, null)
+            //matrix.postScale(1.5F, 1.5F)
+            var resultBitmap = Bitmap.createBitmap(bitmap, 0, 0, mFrameWidth,  mFrameHeight, matrix, true)
+            canvas.drawBitmap(resultBitmap!!, 0F, 0F, null)
         }
     }
+
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun stringFromJNI(): String
+
     external fun nScanFrame( data: ByteArray, resultBitmap: Bitmap);
-
-    protected fun processFrame(data: ByteArray): Bitmap {
-        val frameSize = mFrameWidth * mFrameHeight
-        val rgba = IntArray(frameSize)
-
-        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
-
-        val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
-        bmp.setPixels(rgba, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
-        return bmp
-    }
 
     external fun nFindFeatures(width: Int, height: Int, yuv: ByteArray, rgba: IntArray)
 

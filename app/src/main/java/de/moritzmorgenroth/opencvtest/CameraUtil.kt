@@ -49,7 +49,7 @@ object CameraUtil {
     }
 
     fun getOptimalPreviewSize(sizes: List<Camera.Size>?, w: Int, h: Int): Camera.Size? {
-        val ASPECT_TOLERANCE = 0.1
+        val ASPECT_TOLERANCE = 0.3
         val targetRatio = h.toDouble() / w
 
         if (sizes == null) return null
@@ -57,7 +57,10 @@ object CameraUtil {
         var optimalSize: Camera.Size? = null
         var minDiff = java.lang.Double.MAX_VALUE
 
+        Log.d("SIZES", "My Size: " + w + "," + h)
+
         for (size in sizes) {
+            Log.d("SIZES", "Available Size: " + size.width + "," + size.height)
             val ratio = size.width.toDouble() / size.height
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue
             if (Math.abs(size.height - h) < minDiff) {

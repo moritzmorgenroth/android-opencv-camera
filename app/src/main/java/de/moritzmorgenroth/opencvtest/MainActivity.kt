@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         // Create an instance of Camera
         mCamera = CameraUtil.getCameraInstance()
 
-        CameraUtil.setCameraDisplayOrientation(mCamera!!)
+        //CameraUtil.setCameraDisplayOrientation(mCamera!!)
 
         mPreview = mCamera?.let {
             // Create our Preview view
