@@ -54,6 +54,8 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
     Mat mbgra(height, width, CV_8UC4, (unsigned char *)_bgra);
     Mat mgray(height, width, CV_8UC1, (unsigned char *)_yuv);
 
+    //findCont
+
     __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Dimens: %i , %i ", myuv.rows , myuv.cols);
 
     //Please make attention about BGRA byte order
@@ -61,12 +63,12 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
     cvtColor(myuv, mbgra, CV_YUV420sp2BGR, 4);
 
     vector<KeyPoint> v;
+    Ptr<FastFeatureDetector> detector=FastFeatureDetector::create();
 
-    FastFeatureDetector* detector = FastFeatureDetector::create(50);
-    detector->detect(mgray, v);
+    detector->detect(mgray,v);
 
-    float focusscore = focus_score(&mgray, false);
-    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Focus Score: %f", focusscore );
+//    float focusscore = focus_score(&mgray, false);
+//    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Focus Score: %f", focusscore );
 
     for( size_t i = 0; i < v.size(); i++ )
         circle(mbgra, Point(v[i].pt.x, v[i].pt.y), 10, Scalar(0,0,255,255));
