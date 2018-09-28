@@ -54,13 +54,23 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
     Mat mbgra(height, width, CV_8UC4, (unsigned char *)_bgra);
     Mat mgray(height, width, CV_8UC1, (unsigned char *)_yuv);
 
-    //findCont
 
+    //findCont
     __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Dimens: %i , %i ", myuv.rows , myuv.cols);
 
-    //Please make attention about BGRA byte order
-    //ARGB stored in java as int array becomes BGRA at native level
-    cvtColor(myuv, mbgra, CV_YUV420sp2BGR, 4);
+    Mat reduced;
+
+    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Dimens: %i , %i ", mbgra.rows , mbgra.cols);
+
+    resize(mgray, reduced, Size(mgray.cols/2, mgray.rows/2));
+
+    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Dimens: %i , %i ", reduced.rows , reduced.cols);
+
+    getStructuringElement(MORPH_RECT, Size(9, 3));
+
+    morphologyEx(mgray, mgray, MORPH_GRADIENT, getStructuringElement(MORPH_RECT, Size(9, 3)));
+
+
 
     vector<KeyPoint> v;
     Ptr<FastFeatureDetector> detector=FastFeatureDetector::create();
@@ -70,8 +80,16 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
 //    float focusscore = focus_score(&mgray, false);
 //    __android_log_print(ANDROID_LOG_INFO, "NATIVE", "Focus Score: %f", focusscore );
 
-    for( size_t i = 0; i < v.size(); i++ )
-        circle(mbgra, Point(v[i].pt.x, v[i].pt.y), 10, Scalar(0,0,255,255));
+
+    // resize result
+    resize(mgray, mgray, Size(width, height));
+
+    // copy grayscale to output image
+    cvtColor(mgray, mbgra, CV_GRAY2BGR, 4);
+
+    // do any drawing required
+//    for( size_t i = 0; i < v.size(); i++ )
+//        circle(mbgra, Point(v[i].pt.x, v[i].pt.y), 10, Scalar(0,0,255,255));
 
     env->ReleaseIntArrayElements(bgra, _bgra, 0);
     env->ReleaseByteArrayElements(yuv, _yuv, 0);

@@ -7,6 +7,10 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import java.io.IOException
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+
+
 
 
 
@@ -168,6 +172,13 @@ class CameraPreview(
 
         val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
         bmp.setPixels(rgba, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
+
+
+
+        //val bmp2 = Bitmap.createBitmap(data)
+        val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+
+
         return bmp
     }
 
