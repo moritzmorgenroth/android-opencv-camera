@@ -1,6 +1,7 @@
 package de.moritzmorgenroth.opencvtest
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.Image
 import android.util.Log
 import java.io.IOException
@@ -13,6 +14,9 @@ internal class ImageProcessor(
         private val resultView: ProcessingResultView?
 ) : Runnable {
 
+    private var mFrameWidth : Int = 0
+    private var mFrameHeight : Int = 0
+
     override fun run() {
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
@@ -22,13 +26,10 @@ internal class ImageProcessor(
 
             Log.d(TAG, "process image")
 
-            val mFrameWidth = image.width
-            val mFrameHeight = image.height
+            mFrameWidth = image.width
+            mFrameHeight = image.height
 
-            val data = IntArray(bytes.size) {it -> bytes[it].toInt() }
-
-            val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
-            bmp.setPixels(data, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
+            val bmp = doNativeWork(bytes)
 
             resultView?.drawBitmap(bmp)
 
@@ -37,6 +38,24 @@ internal class ImageProcessor(
         } finally {
             image.close()
         }
+    }
+
+    private fun doNativeWork(data: ByteArray) : Bitmap {
+        val frameSize = mFrameWidth * mFrameHeight
+        val rgba = IntArray(frameSize)
+
+        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
+
+
+        val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
+        bmp.setPixels(rgba, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
+
+
+
+        //val bmp2 = Bitmap.createBitmap(data)
+        val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+
+        return bmp
     }
 
     /**
