@@ -44,7 +44,7 @@ internal class ImageProcessor(
         val frameSize = mFrameWidth * mFrameHeight
         val rgba = IntArray(frameSize)
 
-        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
+//        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
 
 
         val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
