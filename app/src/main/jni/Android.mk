@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 OPENCV_INSTALL_MODULES:=on
 OPENCV_CAMERA_MODULES:=off
-include /Users/bergold/Downloads/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk
+include $(LOCAL_PATH)/../../../../opencv/sdk/native/jni/OpenCV.mk
 
 LOCAL_MODULE    := native-lib
 LOCAL_SRC_FILES := native-lib.cpp opencv-eid-recognizer/recognizer.cpp
