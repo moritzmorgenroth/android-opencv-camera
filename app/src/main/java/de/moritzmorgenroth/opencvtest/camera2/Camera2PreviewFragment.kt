@@ -256,7 +256,7 @@ class Camera2PreviewFragment : Fragment(),
                         largest)
 
                 imageReader = ImageReader.newInstance(previewSize.width, previewSize.height,
-                        ImageFormat.YUV_420_888, /*maxImages*/ 2).apply {
+                        ImageFormat.YV12, 2).apply {
                     setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
                 }
 

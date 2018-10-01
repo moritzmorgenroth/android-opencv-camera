@@ -2,6 +2,7 @@ package de.moritzmorgenroth.opencvtest
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.media.Image
 import android.util.Log
 import java.io.IOException
@@ -44,18 +45,21 @@ internal class ImageProcessor(
         val frameSize = mFrameWidth * mFrameHeight
         val rgba = IntArray(frameSize)
 
-//        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
+        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
 
 
         val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
         bmp.setPixels(rgba, 0/* offset */, mFrameWidth /* stride */, 0, 0, mFrameWidth, mFrameHeight)
 
-
+        val matrix = Matrix()
+        matrix.postRotate(90F)
+        //matrix.postScale(1.5F, 1.5F)
+        val resultBitmap = Bitmap.createBitmap(bmp, 0, 0, mFrameWidth,  mFrameHeight, matrix, true)
 
         //val bmp2 = Bitmap.createBitmap(data)
-        val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+        // val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
 
-        return bmp
+        return resultBitmap
     }
 
     /**

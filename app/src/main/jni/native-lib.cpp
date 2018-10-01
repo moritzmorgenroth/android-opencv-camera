@@ -96,6 +96,13 @@ JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFe
 }
 
 
+extern "C"
+JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_ImageProcessor_nFindFeatures(JNIEnv* env, jobject thiz, jint width, jint height, jbyteArray yuv, jintArray bgra)
+{
+    Java_de_moritzmorgenroth_opencvtest_CameraPreview_nFindFeatures(env, thiz, width, height, yuv, bgra);
+}
+
+
 
 }
 void log(String text) {
