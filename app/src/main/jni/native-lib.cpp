@@ -18,9 +18,9 @@ extern "C" {
     {
         opencv_dmz::abc(env, thiz, width, height, yuv, bgra);
     }
-    JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_ImageProcessor_init(JNIEnv* env, jobject thiz)
+    JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_ImageProcessor_init(JNIEnv* env, jobject thiz, jbyteArray ref, jint width, jint height)
     {
-        opencv_dmz::init(env, thiz);
+        opencv_dmz::init(env, thiz, ref, width, height);
     }
 
 }
