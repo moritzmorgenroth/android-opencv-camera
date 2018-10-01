@@ -11,7 +11,7 @@ internal class ImageProcessor(
         /**
          * The image
          */
-        private val image: Image,
+        private val image: Image?,
         private val resultView: ProcessingResultView?
 ) : Runnable {
 
@@ -19,6 +19,8 @@ internal class ImageProcessor(
     private var mFrameHeight : Int = 0
 
     override fun run() {
+        if (image == null) return
+
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)

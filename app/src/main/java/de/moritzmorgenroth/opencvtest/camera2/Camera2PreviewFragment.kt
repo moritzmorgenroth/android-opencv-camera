@@ -33,6 +33,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import de.moritzmorgenroth.opencvtest.ImageProcessor
 import de.moritzmorgenroth.opencvtest.ProcessingResultView
+import java.lang.IllegalStateException
 import java.util.Arrays
 import java.util.Collections
 import java.util.concurrent.Semaphore
@@ -136,7 +137,11 @@ class Camera2PreviewFragment : Fragment(),
      * still image is ready to be saved.
      */
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-        backgroundHandler?.post(ImageProcessor(it.acquireLatestImage(), processingResultView))
+        try {
+            backgroundHandler?.post(ImageProcessor(it.acquireLatestImage(), processingResultView))
+        } catch (ex: IllegalStateException) {
+            Log.e(TAG, ex.toString())
+        }
     }
 
     /**
@@ -218,12 +223,19 @@ class Camera2PreviewFragment : Fragment(),
                     continue
                 }
 
+                when (characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)) {
+                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY -> Log.d(TAG, "Supported Hardware Level: LEGACY")
+                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED -> Log.d(TAG, "Supported Hardware Level: LIMITED")
+                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> Log.d(TAG, "Supported Hardware Level: FULL")
+                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> Log.d(TAG, "Supported Hardware Level: LEVEL 3")
+                }
+
                 val map = characteristics.get(
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
 
                 // For still image captures, we use the largest available size.
                 val largest = Collections.max(
-                        Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
+                        Arrays.asList(*map.getOutputSizes(ImageFormat.YUV_420_888)),
                         CompareSizesByArea())
 //                imageReader = ImageReader.newInstance(largest.width, largest.height,
 //                        ImageFormat.JPEG, /*maxImages*/ 2).apply {
@@ -256,7 +268,7 @@ class Camera2PreviewFragment : Fragment(),
                         largest)
 
                 imageReader = ImageReader.newInstance(previewSize.width, previewSize.height,
-                        ImageFormat.YV12, 2).apply {
+                        ImageFormat.YUV_420_888, 2).apply {
                     setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
                 }
 
@@ -410,6 +422,7 @@ class Camera2PreviewFragment : Fragment(),
 
             // Here, we create a CameraCaptureSession for camera preview.
             cameraDevice?.createCaptureSession(Arrays.asList(surface, imageReader?.surface),
+            //cameraDevice?.createCaptureSession(Arrays.asList(surface),
                     object : CameraCaptureSession.StateCallback() {
 
                         override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
