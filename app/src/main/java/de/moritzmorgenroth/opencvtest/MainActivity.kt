@@ -79,11 +79,11 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun initNative() {
-        val input = assets.open("ocrb_sample.png")
+        val input = resources.openRawResource(R.raw.ocrb_sample)
         val bmp = BitmapFactory.decodeStream(input)
 
         val pixels = IntArray(bmp.width * bmp.height)
-        bmp.getPixels(pixels, 0, 0, 0, 0, bmp.width, bmp.height)
+        bmp.getPixels(pixels, 0, bmp.width, 0, 0, bmp.width, bmp.height)
 
         nInit(bmp.width, bmp.height, pixels)
     }
