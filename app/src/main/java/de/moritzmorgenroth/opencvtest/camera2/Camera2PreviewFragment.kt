@@ -15,6 +15,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
+import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
 import android.os.Handler
@@ -136,9 +137,15 @@ class Camera2PreviewFragment : Fragment(),
      * This a callback object for the [ImageReader]. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
+
+    var isProcessing = false;
+
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
         try {
-            backgroundHandler?.post(ImageProcessor(it.acquireLatestImage(), processingResultView))
+            if(!isProcessing){
+                isProcessing = true;
+                backgroundHandler?.post(ImageProcessor(it.acquireLatestImage(), processingResultView, {isProcessing = false}))
+            }
         } catch (ex: IllegalStateException) {
             Log.e(TAG, ex.toString())
         }
@@ -397,7 +404,6 @@ class Camera2PreviewFragment : Fragment(),
         } catch (e: InterruptedException) {
             Log.e(TAG, e.toString())
         }
-
     }
 
     /**

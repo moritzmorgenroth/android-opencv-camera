@@ -7,7 +7,7 @@ OPENCV_CAMERA_MODULES:=off
 include $(LOCAL_PATH)/../../../../opencv/sdk/native/jni/OpenCV.mk
 
 LOCAL_MODULE    := native-lib
-LOCAL_SRC_FILES := native-lib.cpp $(LOCAL_PATH)/opencv-eid-recognizer.cpp
+LOCAL_SRC_FILES := native-lib.cpp
 LOCAL_LDLIBS +=  -llog -ldl
 
 include $(BUILD_SHARED_LIBRARY)

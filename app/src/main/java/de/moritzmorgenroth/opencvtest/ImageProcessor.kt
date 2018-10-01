@@ -14,9 +14,11 @@ internal class ImageProcessor(
          * The image
          */
         private val image: Image?,
-        private val resultView: ProcessingResultView?
+        private val resultView: ProcessingResultView?,
+        private val callback: () -> Unit
 ) : Runnable {
 
+    var isProcessing = false;
     private var mFrameWidth : Int = 0
     private var mFrameHeight : Int = 0
 
@@ -43,7 +45,11 @@ internal class ImageProcessor(
             mFrameWidth = image.width
             mFrameHeight = image.height
 
+            isProcessing = true;
+
             val bmp = doNativeWork(bytes)
+
+            isProcessing = false;
 
             resultView?.drawBitmap(bmp)
 
@@ -72,6 +78,8 @@ internal class ImageProcessor(
         matrix.postRotate(90F)
         //matrix.postScale(1.5F, 1.5F)
         val resultBitmap = Bitmap.createBitmap(bmp, 0, 0, mFrameWidth,  mFrameHeight, matrix, true)
+
+        callback();
 
         //val bmp2 = Bitmap.createBitmap(data)
         // val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
