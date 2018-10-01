@@ -1,12 +1,16 @@
 package de.moritzmorgenroth.opencvtest
 
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ColorSpace
 import android.hardware.Camera
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.BitmapCompat
+import android.util.Log
 import android.widget.Toast
 import de.moritzmorgenroth.opencvtest.camera2.Camera2PreviewFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -79,8 +83,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun initNative() {
-        val input = resources.openRawResource(R.raw.ocrb_sample)
-        val bmp = BitmapFactory.decodeStream(input)
+        val opts = BitmapFactory.Options()
+        opts.inPreferredConfig = Bitmap.Config.ARGB_8888
+
+        val bmp = BitmapFactory.decodeResource(resources, R.raw.ocrb_sample, opts)
 
         val pixels = IntArray(bmp.width * bmp.height)
         bmp.getPixels(pixels, 0, bmp.width, 0, 0, bmp.width, bmp.height)
@@ -91,6 +97,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     private external fun nInit(width: Int, height: Int, pixels: IntArray)
 
     companion object {
+
+        private const val TAG = "MainActivity"
         private const val REQUEST_CAMERA_PERMISSION = 1
 
         init {
