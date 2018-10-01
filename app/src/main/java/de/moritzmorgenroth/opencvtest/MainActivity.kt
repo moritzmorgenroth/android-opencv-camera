@@ -51,12 +51,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 //            preview.addView(it)
 //        }
 
-        // Example of a call to a native method
-        val sample_text = stringFromJNI()
-        Log.d("Native output: ", sample_text)
-
-
-
         if (ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 50);
         }
@@ -84,19 +78,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
-
     companion object {
-
         private const val REQUEST_CAMERA_PERMISSION = 1
-
-        // Used to load the 'native-lib' library on application startup.
-        init {
-            System.loadLibrary("native-lib")
-        }
     }
 }

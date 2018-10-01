@@ -62,7 +62,7 @@ internal class ImageProcessor(
         val frameSize = mFrameWidth * mFrameHeight
         val rgba = IntArray(frameSize)
 
-        nFindFeatures(mFrameWidth, mFrameHeight, data, rgba)
+        nProcessPicture(mFrameWidth, mFrameHeight, data, rgba)
 
 
         val bmp = Bitmap.createBitmap(mFrameWidth, mFrameHeight, Bitmap.Config.ARGB_8888)
@@ -83,8 +83,7 @@ internal class ImageProcessor(
      * Native methods that are implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun nScanFrame( data: ByteArray, resultBitmap: Bitmap)
-    external fun nFindFeatures(width: Int, height: Int, yuv: ByteArray, rgba: IntArray)
+    private external fun nProcessPicture(width: Int, height: Int, yuv: ByteArray, rgba: IntArray)
 
     companion object {
 
