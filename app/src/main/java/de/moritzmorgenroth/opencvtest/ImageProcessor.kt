@@ -2,10 +2,12 @@ package de.moritzmorgenroth.opencvtest
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.media.Image
 import android.util.Log
 import java.io.IOException
+import java.lang.IllegalStateException
 
 internal class ImageProcessor(
         /**
@@ -20,6 +22,15 @@ internal class ImageProcessor(
 
     override fun run() {
         if (image == null) return
+
+        Log.d(TAG, "process got ${image.planes.size} planes")
+        Log.d(TAG, "process got ${when(image.format) {
+            ImageFormat.YUV_420_888 -> "YUV"
+            ImageFormat.YV12 -> "YV12"
+            ImageFormat.PRIVATE -> "PRIVATE"
+            else -> "UNKNOWN[${image.format}]"
+        }
+        }")
 
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
@@ -39,7 +50,11 @@ internal class ImageProcessor(
         } catch (e: IOException) {
             Log.e(TAG, e.toString())
         } finally {
-            image.close()
+            try {
+                image.close()
+            } catch (e: IllegalStateException) {
+                Log.e(TAG, e.toString())
+            }
         }
     }
 
