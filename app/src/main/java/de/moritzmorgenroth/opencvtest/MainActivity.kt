@@ -1,14 +1,12 @@
 package de.moritzmorgenroth.opencvtest
 
-import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.hardware.Camera
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.widget.FrameLayout
 import android.widget.Toast
 import de.moritzmorgenroth.opencvtest.camera2.Camera2PreviewFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,6 +22,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initNative()
 
         mProcessingResultView = ProcessingResultView(this)
         mCamera2PreviewFragment = Camera2PreviewFragment.newInstance()
@@ -78,7 +78,23 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
     }
 
+    private fun initNative() {
+        val input = assets.open("ocrb_sample.png")
+        val bmp = BitmapFactory.decodeStream(input)
+
+        val pixels = IntArray(bmp.width * bmp.height)
+        bmp.getPixels(pixels, 0, 0, 0, 0, bmp.width, bmp.height)
+
+        nInit(bmp.width, bmp.height, pixels)
+    }
+
+    private external fun nInit(width: Int, height: Int, pixels: IntArray)
+
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 1
+
+        init {
+            System.loadLibrary("native-lib")
+        }
     }
 }
