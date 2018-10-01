@@ -92,6 +92,7 @@ internal class ImageProcessor(
      * which is packaged with this application.
      */
     private external fun nProcessPicture(width: Int, height: Int, yuv: ByteArray, rgba: IntArray)
+    private external fun init()
 
     companion object {
 
