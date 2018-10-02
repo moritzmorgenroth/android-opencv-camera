@@ -25,15 +25,7 @@ internal class ImageProcessor(
     override fun run() {
         if (image == null) return
 
-        Log.d(TAG, "process got ${image.planes.size} planes")
-        Log.d(TAG, "process got ${when(image.format) {
-            ImageFormat.YUV_420_888 -> "YUV"
-            ImageFormat.YV12 -> "YV12"
-            ImageFormat.PRIVATE -> "PRIVATE"
-            else -> "UNKNOWN[${image.format}]"
-        }
-        }")
-
+        // We only need plane #0, because that's the luminance and we want a b/w picture
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)
@@ -79,10 +71,7 @@ internal class ImageProcessor(
         //matrix.postScale(1.5F, 1.5F)
         val resultBitmap = Bitmap.createBitmap(bmp, 0, 0, mFrameWidth,  mFrameHeight, matrix, true)
 
-        callback();
-
-        //val bmp2 = Bitmap.createBitmap(data)
-        // val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+        callback()
 
         return resultBitmap
     }
