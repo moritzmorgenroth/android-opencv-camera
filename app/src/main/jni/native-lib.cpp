@@ -14,18 +14,30 @@ using namespace cv;
 
 /* This method forms the core of card.io scanning. All others (nCardDetected & nGetFocusScore) */
 extern "C" {
-    JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_ImageProcessor_nProcessPicture(JNIEnv* env, jobject thiz, jint width, jint height, jbyteArray yuv, jintArray bgra)
-    {
-        opencv_dmz::abc(env, thiz, width, height, yuv, bgra);
-    }
-    JNIEXPORT void JNICALL Java_de_moritzmorgenroth_opencvtest_MainActivity_nInit(JNIEnv* env, jobject thiz, jint width, jint height, jintArray pixels)
-    {
-        opencv_dmz::init(env, thiz, pixels, width, height);
-    }
-
+JNIEXPORT void JNICALL
+Java_de_moritzmorgenroth_opencvtest_ImageProcessor_nProcessPicture(JNIEnv *env, jobject thiz,
+                                                                   jint width, jint height,
+                                                                   jbyteArray yuv, jintArray bgra) {
+    opencv_dmz::abc(env, thiz, width, height, yuv, bgra);
 }
-
-
-void log(String text) {
-    // TODO Implement
+JNIEXPORT void JNICALL
+Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nInit(JNIEnv *env, jobject thiz, jlong ref) {
+    Mat mat = *(Mat *) ref;
+    opencv_dmz::init(env, thiz, mat);
+}
+void JNICALL
+Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nSalt(JNIEnv *env, jobject instance,
+                                                              jlong matAddrGray,
+                                                              jint nbrElem, jstring textString) {
+    Mat image = *(Mat *) matAddrGray;
+    const char* abc = env->GetStringUTFChars(textString, 0);;
+    opencv_dmz::can(image, abc);
+    for (int k = 0; k < nbrElem; k++) {
+        int i = rand() % image.cols;
+        int j = rand() % image.rows;
+        image.at<uchar>(j, i) = 255;
+    }
+    nbrElem = 10;
+    env->ReleaseStringUTFChars(textString, abc);
+}
 }
