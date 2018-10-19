@@ -26,18 +26,10 @@ Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nInit(JNIEnv *env, jobject th
     opencv_dmz::init(env, thiz, mat);
 }
 void JNICALL
-Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nSalt(JNIEnv *env, jobject instance,
-                                                              jlong matAddrGray,
-                                                              jint nbrElem, jstring textString) {
-    Mat image = *(Mat *) matAddrGray;
-    const char* abc = env->GetStringUTFChars(textString, 0);;
-    opencv_dmz::can(image, abc);
-    for (int k = 0; k < nbrElem; k++) {
-        int i = rand() % image.cols;
-        int j = rand() % image.rows;
-        image.at<uchar>(j, i) = 255;
-    }
-    nbrElem = 10;
-    env->ReleaseStringUTFChars(textString, abc);
+Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nSalt(JNIEnv *env, jobject instance, jlong originalAddress, jlong intermediateAddress, jlong resultAddress) {
+    Mat original = *(Mat *) originalAddress;
+    Mat intermediate = *(Mat *) intermediateAddress;
+    Mat result = *(Mat *) resultAddress;
+    opencv_dmz::can(original, intermediate, result);
 }
 }

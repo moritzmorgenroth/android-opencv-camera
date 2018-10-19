@@ -18,6 +18,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -62,7 +63,6 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
         cameraBridgeViewBase.setCvCameraViewListener(this);
 
-        //nInit();
     }
 
     @Override
@@ -126,20 +126,31 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.raw.ocrb_sample);
         Mat mat = new Mat();
         Utils.bitmapToMat(bitmap, mat);
-        Log.d(TAG, "mat dimens: " + mat.width() + "," + mat.height());
+        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2GRAY);
         return mat;
     }
 
+    private boolean initalized = false;
+
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        if(!initalized){
+            nInit(this.getSample().getNativeObjAddr());
+            initalized = true;
+            Log.d(TAG, "Initialization called");
+        }
         Mat matGray = inputFrame.gray();
+        getSample();
         Core.rotate(matGray, matGray, Core.ROTATE_90_CLOCKWISE);
+//        Log.d(TAG, "OnFrame: " + matGray.toString());
         String resString = "";
         Integer resInt = 2000;
-        nSalt(matGray.getNativeObjAddr(), 2000, resString);
+        Mat intermediate = new Mat();
+        Mat result = new Mat();
+        nSalt(matGray.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
         Log.d(TAG, resString + resInt);
-        return matGray;
+        return result;
     }
 
-    public native void nSalt(long matAddrGray, int nbrElem, String string);
+    public native void nSalt(long original, long intermediate, long result);
     public native void nInit(long matAddrReference);
 }
