@@ -138,15 +138,21 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
             initalized = true;
             Log.d(TAG, "Initialization called");
         }
-        Mat matGray = inputFrame.gray();
-        getSample();
-        Core.rotate(matGray, matGray, Core.ROTATE_90_CLOCKWISE);
+        Mat original = inputFrame.gray();
+        Core.rotate(original, original, Core.ROTATE_90_CLOCKWISE);
+        Mat result = inputFrame.rgba();
+        //Core.rotate(result, result, Core.ROTATE_90_CLOCKWISE);
+
+
 //        Log.d(TAG, "OnFrame: " + matGray.toString());
         String resString = "";
         Integer resInt = 2000;
+
         Mat intermediate = new Mat();
-        Mat result = new Mat();
-        nSalt(matGray.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+        original.copyTo(intermediate);
+
+        nSalt(original.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+
         Log.d(TAG, resString + resInt);
         return result;
     }

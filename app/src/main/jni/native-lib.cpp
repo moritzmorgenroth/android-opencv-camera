@@ -30,6 +30,9 @@ Java_de_moritzmorgenroth_opencvtest_OpenCVActivity_nSalt(JNIEnv *env, jobject in
     Mat original = *(Mat *) originalAddress;
     Mat intermediate = *(Mat *) intermediateAddress;
     Mat result = *(Mat *) resultAddress;
+
     opencv_dmz::can(original, intermediate, result);
+
+    //result = original;
 }
 }
