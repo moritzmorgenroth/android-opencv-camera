@@ -154,7 +154,7 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         nSalt(original.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
 
         Log.d(TAG, resString + resInt);
-        return result;
+        return intermediate;
     }
 
     public native void nSalt(long original, long intermediate, long result);
