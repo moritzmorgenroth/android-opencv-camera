@@ -62,7 +62,7 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         cameraBridgeViewBase = (CameraBridgeViewBase) findViewById(R.id.main_surface);
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
         cameraBridgeViewBase.setCvCameraViewListener(this);
-
+        cameraBridgeViewBase.
     }
 
     @Override
@@ -138,12 +138,15 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
             initalized = true;
             Log.d(TAG, "Initialization called");
         }
-        Mat original = inputFrame.gray();
-        Core.rotate(original, original, Core.ROTATE_90_CLOCKWISE);
+        Mat original = inputFrame.rgba();
+
+        Mat bw = new Mat();
+        Imgproc.cvtColor(original, bw, Imgproc.COLOR_BGRA2GRAY);
+        //Core.rotate(bw, bw, Core.ROTATE_90_CLOCKWISE);
+
         Mat result = inputFrame.rgba();
         //Core.rotate(result, result, Core.ROTATE_90_CLOCKWISE);
-
-
+        
 //        Log.d(TAG, "OnFrame: " + matGray.toString());
         String resString = "";
         Integer resInt = 2000;
@@ -151,10 +154,10 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         Mat intermediate = new Mat();
         original.copyTo(intermediate);
 
-        nSalt(original.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+        //nSalt(original.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
 
         Log.d(TAG, resString + resInt);
-        return intermediate;
+        return bw;
     }
 
     public native void nSalt(long original, long intermediate, long result);
