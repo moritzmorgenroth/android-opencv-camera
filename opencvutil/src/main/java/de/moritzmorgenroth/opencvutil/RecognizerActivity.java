@@ -1,7 +1,6 @@
-package de.moritzmorgenroth.opencvtest;
+package de.moritzmorgenroth.opencvutil;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,9 +21,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import de.moritzmorgenroth.opencvutil.RecognizerActivity;
-
-public class OpenCVActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class RecognizerActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "OPENCV::Activity";
     private CameraBridgeViewBase cameraBridgeViewBase;
@@ -56,7 +53,7 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         setContentView(R.layout.activity_recognizer);
 
         // Permissions for Android 6+
-        ActivityCompat.requestPermissions(OpenCVActivity.this,
+        ActivityCompat.requestPermissions(RecognizerActivity.this,
                 new String[]{Manifest.permission.CAMERA},
                 1);
 
@@ -64,8 +61,6 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
         cameraBridgeViewBase.setCvCameraViewListener(this);
         cameraBridgeViewBase.setMaxFrameSize(2000, 2000);
-        Intent intent = new Intent(this, RecognizerActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -98,7 +93,7 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(OpenCVActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecognizerActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -156,13 +151,13 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
         Mat intermediate = new Mat();
         bw.copyTo(intermediate);
 
-        nSalt(bw.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+        nRecognize(bw.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
 
         Mat display = new Mat();
         Imgproc.cvtColor(intermediate, display, Imgproc.COLOR_GRAY2BGR);
         return display;
     }
 
-    public native void nSalt(long original, long intermediate, long result);
+    public native void nRecognize(long original, long intermediate, long result);
     public native void nInit(long matAddrReference);
 }

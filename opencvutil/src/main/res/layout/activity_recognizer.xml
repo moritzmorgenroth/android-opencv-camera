@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OpenCVActivity">
+    tools:context=".RecognizerActivity">
 
     <org.opencv.android.JavaCameraView
         android:layout_width="0dp"

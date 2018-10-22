@@ -222,7 +222,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                 e.printStackTrace();
             }
         }
-
         return result;
     }
 
@@ -231,7 +230,6 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
             if (mCamera != null) {
                 mCamera.stopPreview();
                 mCamera.setPreviewCallback(null);
-
                 mCamera.release();
             }
             mCamera = null;

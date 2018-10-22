@@ -201,7 +201,6 @@ class CameraPreview(
         Log.d(TAG, "Dimens of Frame: " + bitmap!!.width + "," + bitmap!!.height)
 
         if(bitmap != null) {
-
             val matrix = Matrix();
             matrix.postRotate(90F);
             //matrix.postScale(1.5F, 1.5F)
