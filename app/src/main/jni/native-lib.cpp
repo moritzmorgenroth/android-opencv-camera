@@ -20,13 +20,12 @@ Java_de_moritzmorgenroth_opencvtest_RecognizerActivity_nInit(JNIEnv *env, jobjec
     opencv_dmz::init(env, thiz, mat);
 }
 jstring JNICALL
-Java_de_moritzmorgenroth_opencvtest_RecognizerActivity_nRecognize(JNIEnv *env, jobject instance, jlong originalAddress, jlong intermediateAddress, jlong resultAddress) {
+Java_de_moritzmorgenroth_opencvtest_RecognizerActivity_nRecognize(JNIEnv *env, jobject instance, jlong originalAddress, jlong intermediateAddress) {
     Mat original = *(Mat *) originalAddress;
     Mat intermediate = *(Mat *) intermediateAddress;
-    Mat result = *(Mat *) resultAddress;
 
 //    const char* can = opencv_dmz::can(original, intermediate, result);
-    opencv_dmz::can(original, intermediate, result);
+    opencv_dmz::can(original, intermediate);
 
     jstring res = (*env).NewStringUTF("huhu");
     return res;

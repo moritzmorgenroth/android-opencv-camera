@@ -483,7 +483,7 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
             int height = accessor.getHeight(size);
 
             // Mod: Only accept square previews
-            if (true && width <= maxAllowedWidth && height <= maxAllowedHeight) {
+            if (true || width <= maxAllowedWidth && height <= maxAllowedHeight) {
                 if (width >= calcWidth && height >= calcHeight && height == width ) {
                     calcWidth = (int) width;
                     calcHeight = (int) height;
