@@ -19,13 +19,16 @@ Java_de_moritzmorgenroth_opencvutil_RecognizerActivity_nInit(JNIEnv *env, jobjec
     Mat mat = *(Mat *) ref;
     opencv_dmz::init(env, thiz, mat);
 }
-void JNICALL
+jstring JNICALL
 Java_de_moritzmorgenroth_opencvutil_RecognizerActivity_nRecognize(JNIEnv *env, jobject instance, jlong originalAddress, jlong intermediateAddress, jlong resultAddress) {
     Mat original = *(Mat *) originalAddress;
     Mat intermediate = *(Mat *) intermediateAddress;
     Mat result = *(Mat *) resultAddress;
 
-    opencv_dmz::can(original, intermediate, result);
+    const char* can = opencv_dmz::can(original, intermediate, result);
+
+    jstring res = (*env).NewStringUTF(can);
+    return res;
 
     //result = original;
 }

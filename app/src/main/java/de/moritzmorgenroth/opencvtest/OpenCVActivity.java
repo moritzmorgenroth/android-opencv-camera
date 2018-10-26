@@ -160,6 +160,7 @@ public class OpenCVActivity extends AppCompatActivity implements CameraBridgeVie
 
         Mat display = new Mat();
         Imgproc.cvtColor(intermediate, display, Imgproc.COLOR_GRAY2BGR);
+
         return display;
     }
 

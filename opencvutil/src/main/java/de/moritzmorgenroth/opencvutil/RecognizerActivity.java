@@ -151,13 +151,14 @@ public class RecognizerActivity extends AppCompatActivity implements CameraBridg
         Mat intermediate = new Mat();
         bw.copyTo(intermediate);
 
-        nRecognize(bw.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+        String abc = nRecognize(bw.getNativeObjAddr(), intermediate.getNativeObjAddr(), result.getNativeObjAddr());
+        Log.d("Taggytag", abc);
 
         Mat display = new Mat();
         Imgproc.cvtColor(intermediate, display, Imgproc.COLOR_GRAY2BGR);
         return display;
     }
 
-    public native void nRecognize(long original, long intermediate, long result);
+    public native String nRecognize(long original, long intermediate, long result);
     public native void nInit(long matAddrReference);
 }
