@@ -1,6 +1,7 @@
 package de.moritzmorgenroth.opencvtest;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,8 @@ public class RecognizerActivity extends AppCompatActivity implements CameraBridg
 
     private static final String TAG = "OPENCV::Activity";
     private CameraBridgeViewBase cameraBridgeViewBase;
+
+    public static final String EXTRA_CAN = "extra_can";
 
     private BaseLoaderCallback _baseLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -154,6 +157,12 @@ public class RecognizerActivity extends AppCompatActivity implements CameraBridg
         String abc = nRecognize(bw.getNativeObjAddr(), intermediate.getNativeObjAddr());
         Log.d("Taggytag", abc);
 
+        if(!abc.isEmpty()){
+            Intent data = new Intent();
+            data.putExtra(EXTRA_CAN, abc);
+            setResult(RESULT_OK, data);
+            finish();
+        }
         Mat display = new Mat();
         Imgproc.cvtColor(intermediate, display, Imgproc.COLOR_GRAY2BGR);
 
