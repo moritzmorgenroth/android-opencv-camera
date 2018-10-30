@@ -1,12 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
-INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-7:12
+ADDED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
+INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:2:1-6:12
 	package
 		ADDED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml:3:7-27
 		INJECTED from /Users/Wingding/Documents/Programming/opensource/android-opencv-camera/openCVLibrary343/src/main/AndroidManifest.xml
