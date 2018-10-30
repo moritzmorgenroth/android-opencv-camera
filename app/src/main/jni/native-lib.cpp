@@ -25,9 +25,12 @@ Java_de_moritzmorgenroth_opencvtest_RecognizerActivity_nRecognize(JNIEnv *env, j
     Mat intermediate = *(Mat *) intermediateAddress;
 
 //    const char* can = opencv_dmz::can(original, intermediate, result);
-    opencv_dmz::can(original, intermediate);
+    std::string can = opencv_dmz::can(original, intermediate);
 
-    jstring res = (*env).NewStringUTF("huhu");
+    const char * c = can.c_str();
+
+    // do stuff
+    jstring res = (*env).NewStringUTF(c);
     return res;
 
     //result = original;
