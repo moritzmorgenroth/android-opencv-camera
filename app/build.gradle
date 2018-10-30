@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
@@ -7,7 +7,6 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "de.moritzmorgenroth.opencvtest"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -26,6 +25,9 @@ android {
         }
     }
     externalNativeBuild {
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
         ndkBuild {
             path "src/main/jni/Android.mk"
         }
@@ -39,5 +41,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compile project(path: ':opencvsdk')
+    implementation project(path: ':openCVLibrary343')
 }

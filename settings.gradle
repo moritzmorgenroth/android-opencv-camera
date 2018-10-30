@@ -1,2 +1,2 @@
-include ':app', ':opencvsdk'
-project(':opencvsdk').projectDir = new File('opencv/sdk')
+include ':app'
+include ':openCVLibrary343'
