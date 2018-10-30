@@ -1,6 +1,3 @@
 [submodule "app/src/main/jni/opencv-eid-recognizer"]
 	path = app/src/main/jni/opencv-eid-recognizer
 	url = git@bitbucket.org:bdr-eid/opencv-eid-recognizer.git
-[submodule "opencvutil/src/main/jni/opencv-eid-recognizer"]
-	path = opencvutil/src/main/jni/opencv-eid-recognizer
-	url = git@bitbucket.org:bdr-eid/opencv-eid-recognizer.git
