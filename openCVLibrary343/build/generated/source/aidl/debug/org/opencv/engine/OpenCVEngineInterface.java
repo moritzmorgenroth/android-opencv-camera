@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/Wingding/Documents/Programming/bdr/eId/frontend-android/android-opencv-camera/openCVLibrary343/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+ * Original file: /Users/Wingding/Documents/Programming/bdr/201809_eid_showcase/frontend-android/android-opencv-camera/openCVLibrary343/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**
